@@ -8,32 +8,60 @@ import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
+    print '*** connect ***'
     return psycopg2.connect("dbname=tournament")
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
+    print '*** deleteMatches ***'
     db = connect()
+
+    c = db.cursor()
+    c.execute("select * from matches")
+    print 'before: ', c.fetchall()
+
     c = db.cursor()
     c.execute("delete from matches")
+    c.execute("select * from matches")
+    print 'after: ', c.fetchall()
+
     db.close()
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
+    print '*** deletePlayers ***'
     db = connect()
     c = db.cursor()
+    c.execute("select * from players")
+    print 'before: ', c.fetchall()
+    c = db.cursor()
     c.execute("delete from players")
+    db.commit()
+
+    c.execute("select * from players")
+    print 'after: ', c.fetchall()
     db.close()
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
+    print '*** countPlayers ***'
     db = connect()
     c = db.cursor()
+    #c.execute("select count(*) from players")
+    c.execute("select * from players")
+    #results = c.fetchone()[0]
+    all = c.fetchall()
+    print 'all: ', all
+    c = db.cursor()
     c.execute("select count(*) from players")
-    results = c.fetchone()[0]
-    print 'yoda:', results
+    results = c.fetchall()[0][0]
+    #results = c.fetchall()[0]
+    #print c.fetchall()[0]
+    #results = c.fetchall()
+    print 'countPlayers:', results
     db.close()
     return results
 
@@ -48,11 +76,24 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
+    print '*** registerPlayer ***'
     db = connect()
+
     c = db.cursor()
+    c.execute("select * from players")
+    print 'before: ', c.fetchall()
+
+    print 'inserting: ', name
     c.execute("insert into players (name) values (%s)", (name,))
-    c.execute("select from players *)
-    print c.fetchall()
+    db.commit()
+
+    c.execute("select * from players")
+    print 'after: ', c.fetchall()
+
+    #c.execute("select count(*) from players")
+    #print c.fetchall()[0]
+    #c.execute("select count(*) from players")
+    #print c.fetchall()
     db.close()
 
 
@@ -69,6 +110,9 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
+    print '*** playerStandings ***'
+    return [(0, 0, 0, 1), (0, 0, 0, 1)]
+
 
 
 def reportMatch(winner, loser):
@@ -78,6 +122,7 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+    print '*** reportMatch ***'
  
  
 def swissPairings():
@@ -95,5 +140,6 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    print '*** swissPairings ***'
 
 

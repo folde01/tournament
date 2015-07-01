@@ -5,29 +5,37 @@
 from tournament import *
 
 def testDeleteMatches():
+    print '#### testDeleteMatches'
     deleteMatches()
     print "1. Old matches can be deleted."
+    print
 
 
 def testDelete():
+    print '#### testDelete'
     deleteMatches()
     deletePlayers()
     print "2. Player records can be deleted."
+    print
 
 
 def testCount():
+    print '#### testCount'
     deleteMatches()
     deletePlayers()
     c = countPlayers()
+    print 'c: ', c
     if c == '0':
         raise TypeError(
             "countPlayers() should return numeric zero, not string '0'.")
     if c != 0:
         raise ValueError("After deleting, countPlayers should return zero.")
     print "3. After deleting, countPlayers() returns zero."
+    print
 
 
 def testRegister():
+    print '#### testRegister'
     deleteMatches()
     deletePlayers()
     registerPlayer("Chandra Nalaar")
@@ -36,9 +44,11 @@ def testRegister():
         raise ValueError(
             "After one player registers, countPlayers() should be 1.")
     print "4. After registering a player, countPlayers() returns 1."
+    print
 
 
 def testRegisterCountDelete():
+    print '#### testRegisterCountDelete'
     deleteMatches()
     deletePlayers()
     registerPlayer("Markov Chaney")
@@ -54,9 +64,11 @@ def testRegisterCountDelete():
     if c != 0:
         raise ValueError("After deleting, countPlayers should return zero.")
     print "5. Players can be registered and deleted."
+    print
 
 
 def testStandingsBeforeMatches():
+    print '#### testStandingsBeforeMatches'
     deleteMatches()
     deletePlayers()
     registerPlayer("Melpomene Murray")
@@ -77,9 +89,11 @@ def testStandingsBeforeMatches():
         raise ValueError("Registered players' names should appear in standings, "
                          "even if they have no matches played.")
     print "6. Newly registered players appear in the standings with no matches."
+    print
 
 
 def testReportMatches():
+    print '#### testReportMatches'
     deleteMatches()
     deletePlayers()
     registerPlayer("Bruno Walton")
@@ -99,9 +113,11 @@ def testReportMatches():
         elif i in (id2, id4) and w != 0:
             raise ValueError("Each match loser should have zero wins recorded.")
     print "7. After a match, players have updated standings."
+    print
 
 
 def testPairings():
+    print '#### testPairings'
     deleteMatches()
     deletePlayers()
     registerPlayer("Twilight Sparkle")
@@ -123,6 +139,7 @@ def testPairings():
         raise ValueError(
             "After one match, players with one win should be paired.")
     print "8. After one match, players with one win are paired."
+    print
 
 
 if __name__ == '__main__':
