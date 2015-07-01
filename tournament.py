@@ -111,8 +111,41 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     print '*** playerStandings ***'
-    return [(0, 0, 0, 1), (0, 0, 0, 1)]
 
+    # return [(0, "Melpomene Murray", 0, 0), (0, "Randy Schwartz", 0, 0)]
+    #c.execute("select * from matches")
+    #print 'matches: ', c.fetchall()
+
+    # (id, name, wins, matches):
+    # fake the 0s until we know how to query correctly for them:
+
+    db = connect()
+
+    c = db.cursor()
+    c.execute("select * from matches")
+    print 'matches:', c.fetchall()
+
+    c.execute("select id, name from players")
+    tmplist = c.fetchall()
+    print 'tmplist:', tmplist
+    results = []
+
+    for t in tmplist:
+
+        c.execute("select count(*) from matches where winner = %s or loser = %s", ((t[0],), (t[0],))) 
+        matchCount = c.fetchall()[0][0]
+       
+        c.execute("select count(*) from matches where winner = %s", ((t[0],))) 
+        winCount = c.fetchall()[0][0]
+        t = (t[0], t[1], winCount, matchCount)
+        results.append(t)
+
+    print 'results:', results
+    db.close()
+    return results
+
+
+    # c.execute("select players.id, players.name, count(*) match.id from players, matches where matches.winner = players.id and players.id = 1")
 
 
 def reportMatch(winner, loser):
@@ -123,6 +156,22 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
     print '*** reportMatch ***'
+
+    db = connect()
+
+    c = db.cursor()
+    c.execute("select * from matches")
+    print 'before: ', c.fetchall()
+
+    print 'inserting: ', (winner, loser) 
+    #c.execute("insert into players (name) values (%s)", (name,))
+    c.execute("insert into matches (winner, loser) values (%s, %s)", (winner, loser))
+    db.commit()
+
+    c = db.cursor()
+    c.execute("select * from matches")
+    print 'after: ', c.fetchall()
+    db.close()
  
  
 def swissPairings():
